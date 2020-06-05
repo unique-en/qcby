@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+</head>
+<body>
+	<div id="content"></div>
+
+	<script type="text/javascript">
+		newuse();
+	    function newuse(){
+	      	 $.ajax({
+				type: "get",
+				url: "/qcby/file/list",
+				data: {},
+				cache: false,
+				async : false,
+				dataType: "json",
+				success: function (data,textStatus, jqXHR)
+				{
+					var html = "";
+
+					for(var temp in data){
+						html+=data[temp];
+						html+="<a href='/qcby/file/down?name=" + temp + "'>下载</a><br />";
+						// console.log(data[temp]);
+						console.log(temp);
+					}
+					$("#content").html(html);
+				},
+				error:function (XMLHttpRequest, textStatus, errorThrown) {
+					alert(typeof(errorThrown));
+				}
+			 });
+	    }
+ 	</script>
+</body>
+</html>

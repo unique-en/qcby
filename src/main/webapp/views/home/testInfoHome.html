@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <title>成绩信息显示</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="/qcby/layuiadmin/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="/qcby/layuiadmin/style/admin.css" media="all">
+</head>
+<body>
+
+  <div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+      <div class="layui-col-md8">    
+        <div class="layui-card">
+          <div class="layui-card-header">
+            考试成绩显示
+          </div>
+          <div class="layui-card-body">
+            <div class="layui-row layui-col-space10" th:each="list:${list}">
+              <div class="layui-col-xs10 layui-col-sm4" style="width: 430px;">
+                <div class="layuiadmin-card-text">
+                  <div class="layui-text-top"><i class="layui-icon layui-icon-water"></i><a th:text="${list.testProject}"></a></div>
+                  <p class="layui-text-center">班级：<span th:text="${list.claName}"></span></p>
+                  <p class="layui-text-center">考试时间：<span th:text="${list.date}"></span></p>
+                  <p class="layui-text-center">难易程度：<span id="msg" th:text="${list.difficult}"></span></p>
+                  <p class="layui-text-bottom">
+                      <button class="layui-btn layuiadmin-btn-admin" type="submit"><a style="color: #dddddd" th:href="'/qcby/views/home/listStudent.html?testId=' + ${list.testId}">查看学生成绩</a></button>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/qcby/layuiadmin/layui/layui.js"></script>
+  <script>
+  layui.config({
+    base: '/qcby/layuiadmin/' //静态资源所在路径
+  }).extend({
+    index: 'lib/index' //主入口模块
+  }).use(['index', 'sample','jquery','cookie'],function () {
+    let $ = layui.jquery;
+    let cookie = layui.cookie;
+    let session = $.cookie('the_cookie');
+    if(session == null || session == ""){
+      layer.alert("您还未登录，请先登录",{icon:5},function () {
+        location.href="/qcby/views/user/login.html";
+      });
+    }
+
+
+  });
+  </script>
+</body>
+</html>

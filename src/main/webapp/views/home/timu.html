@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>layui出题中心</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="/qcby/layuiadmin/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="/qcby/layuiadmin/style/admin.css" media="all">
+  <link href="/qcby/favicon.ico" rel="shortcut icon" />
+</head>
+<body>
+  <div class="layui-fluid">   
+    <div class="layui-card layui-form">
+      <div class="layui-form-item layui-card-header layuiadmin-card-header-auto">
+        <div class="layui-form-item">
+          <div class="layui-inline">
+            <label class="layui-form-label">试卷标题</label>
+            <div class="layui-input-block">
+              <input type="text" id="testTitle" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+            <label id="testId" style="display: none;"></label>
+          </div>
+          <div class="layui-inline">
+              <a class="layui-btn layuiadmin-btn-admin" onclick="impot();">
+               题库导入
+              </a>
+          </div>
+          <div style="width: 296.4px;">
+            <label class="layui-form-label">难易程度</label>
+            <div class="layui-input-block">
+              <select id="difficult" lay-verify="required">
+                <option value=""></option>
+                <option value="难">难</option>
+                <option value="中等">中等</option>
+                <option value="易">易</option>
+              </select>
+            </div>
+          </div>
+          <div style="width: 296.4px;margin-top: 5px;">
+            <label class="layui-form-label">题目类型</label>
+            <div class="layui-input-block">
+              <select id="type" lay-verify="required" lay-filter="search_type">
+                <option value=""></option>
+                <option value="单选">单项选择</option>
+                <option value="多选">多项选择</option>
+                <option value="简答">简答题</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="layui-form-item layui-card-body">
+        <ul>
+          <li>
+            <label class="layui-form-label">分数</label>
+            <div class="layui-input-block" style="width: 100px;">
+              <input type="text" id="second" value="5.0" autocomplete="off" class="layui-input">
+            </div>
+          </li><br>
+          <li>
+            <label class="layui-form-label" style="font-size: 20px;color: #ff0000;">题目：</label>
+            <textarea id="demo" name="title" style="display: none;"></textarea>
+          </li>
+          <hr>
+          <li id="A">
+            <label class="layui-form-label"  style="font-size: 20px;color: red;">A：</label>
+            <textarea id="demoA" name="A" style="display: none;"></textarea>
+          </li><br>
+          <li id="B">
+            <label class="layui-form-label" style="font-size: 20px;color: #ff0000;">B：</label>
+            <textarea id="demoB" name="B" style="display: none;"></textarea>
+          </li><br>
+          <li id="C">
+            <label class="layui-form-label" style="font-size: 20px;color: red;">C：</label>
+            <textarea id="demoC" name="C" style="display: none;"></textarea>
+          </li><br>
+          <li id="D">
+            <label class="layui-form-label" style="font-size: 20px;color: red;">D：</label>
+            <textarea id="demoD" name="D" style="display: none;"></textarea>
+          </li><br>
+          <li>
+            <label class="layui-form-label" style="font-size: 20px;color: red;">答案：</label>
+            <textarea id="demoE" name="answer" style="display: none;"></textarea>
+          </li><br>
+          <li>
+            <label class="layui-form-label" style="font-size: 20px;color: red;">解析：</label>
+            <textarea id="demoF" name="parsing" style="display: none;"></textarea>
+          </li>
+        </ul><br>
+        <div style="padding-bottom: 10px;">
+          <button class="layui-btn layuiadmin-btn-admin" data-type="batchdel"><a lay-href="/qcby/views/home/homepage1.html">返回</a></button>
+          <button class="layui-btn layuiadmin-btn-admin" id="add">添加</button>
+          <form action="/qcby/teacher/yulan" method="get">
+
+            <input type="text" name="testTitle" id="testitle" style="display: none" />
+            <input type="text" name="testId" id="tesid" style="display: none" />
+            <input type="text" name="project" id="project" style="display: none" />
+            <input type="text" name="cla_name" id="cla_name" style="display: none" />
+            <input type="text" name="difficult" id="difficultly" style="display: none" />
+
+            <button class="layui-btn layuiadmin-btn-admin"  type="submit" id="view" style="margin-top: -64px;margin-left: 155px;">
+              预览试卷
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+ <script src="/qcby/layuiadmin/layui/layui.js"></script>
+  <script>
+    let flag;
+    let claName;
+    layui.config({
+      base: '/qcby/layuiadmin/' //静态资源所在路径
+    }).extend({
+      index: 'lib/index' //主入口模块
+    });
+
+    layui.use(['index','layedit','jquery','layer','user','cookie'], function(){
+
+      var layedit = layui.layedit;
+      var $ = layui.jquery;
+      var layer = layui.layer;
+      var form = layui.form;
+
+      let cookie = layui.cookie;
+      let session = $.cookie('the_cookie');
+      if(session == null || session == ""){
+        layer.alert("您还未登录，请先登录",{icon:5},function () {
+          location.href="/qcby/views/user/login.html";
+        });
+      }
+
+
+
+      //获取页面传参的参数
+      let url = decodeURI(window.location.href);
+      let argsIndex = url.split("=");
+      let arg = argsIndex[1];
+
+      let pro = arg.split("&");
+      //获取学科类别
+      let project = pro[0];
+      //获取班级
+      let cla_name = argsIndex[2];
+      console.info(project + "----" + cla_name);
+      $("#cla_name").val(cla_name);
+      $("#project").val(project);
+      $("#testObj").val(project);
+      flag = project;
+      claName = cla_name;
+
+      var demo1 = layedit.build('demo');
+      var demoA = layedit.build('demoA'); //建立编辑器
+      var demoB = layedit.build('demoB');
+      var demoC = layedit.build('demoC');
+      var demoD = layedit.build('demoD');
+      var demoE = layedit.build('demoE');
+      var demoF = layedit.build('demoF');
+
+      form.on('select(search_type)', function(data){
+        if(data.value == "简答"){
+          $("#A").hide();
+          $("#B").hide();
+          $("#C").hide();
+          $("#D").hide();
+        }else {
+          $("#A").show();
+          $("#B").show();
+          $("#C").show();
+          $("#D").show();
+        }
+
+      });
+
+      form.on('select(search_type)', function(data){
+        if(data.value == "简答"){
+          $("#A").hide();
+          $("#B").hide();
+          $("#C").hide();
+          $("#D").hide();
+        }else {
+          $("#A").show();
+          $("#B").show();
+          $("#C").show();
+          $("#D").show();
+        }
+
+      });
+
+
+      $("#add").on("click",function(){
+         var testTitle = $("#testTitle").val();
+         var testId = $("#testId").text();
+         var difficult = $("#difficult").val();
+         var type = $("#type").val();
+         var second = $("#second").val();
+         var title = layedit.getText(demo1);
+         var A = layedit.getText(demoA);
+         var B = layedit.getText(demoB);
+         var C = layedit.getText(demoC);
+         var D = layedit.getText(demoD);
+         var answer = layedit.getText(demoE);
+         var parsing = layedit.getText(demoF);
+
+        $("#testitle").val(testTitle);
+        $("#difficultly").val(difficult);
+
+         $.ajax({
+           type: "post",
+           url: "/qcby/teacher/insert",
+           data: {
+             testTitle:testTitle,
+             testId:testId,
+             difficult:difficult,
+             type:type,
+             second:second,
+             title:title,
+             A:A, B:B, C:C, D:D,
+             answer:answer,
+             parsing:parsing,
+             project:project
+           },
+           cache: false,
+           async : false,
+           //dataType: "JSON",
+           success: function (data) {
+             if(data == "error"){
+               layer.alert('请给出正确答案', {icon:0});
+             }else {
+
+               $("#testId").text(data);
+               $("#tesid").val(data);
+               layer.msg('添加成功', {
+                 offset: '15px'
+                 , icon: 1
+                 , time: 1000
+               }, function () {
+                 $("#second").val("");
+                 layedit.setContent(demo1, "");
+                 layedit.setContent(demoA, "");
+                 layedit.setContent(demoB, "");
+                 layedit.setContent(demoC, "");
+                 layedit.setContent(demoD, "");
+                 layedit.setContent(demoE, "");
+                 layedit.setContent(demoF, "");
+               });
+
+             }
+           }
+         });
+      });
+
+    });
+    function impot() {
+      url = "kuban.html?testObj="+flag+"&claName="+claName ;//此处拼接内容
+      window.location.href = url;
+    }
+
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>学生考试记录</title>
+  <link href="/qcby/layuiadmin/layui/css/layui.css" rel="stylesheet" type="text/css">
+  <link href="/qcby/layuiadmin/global.css" rel="stylesheet" type="text/css">
+</head>
+<body style="padding:10px;">
+<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+<!--[if lt IE 9]>
+<script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+<script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+<!--表格数据开始-->
+<table id="test" lay-filter="test" ></table>
+<script type="text/html" id="paiming"></script>
+
+<script src="/qcby/layuiadmin/layui/layui.js"></script>
+<script src="/qcby/layuiadmin/modules/cookie.js"></script>
+<script>
+  layui.use(["element", "jquery", "layer", "form","table"], function () {
+    var element = layui.element;
+    var $ = layui.jquery;
+    var layer = layui.layer;
+    var form = layui.form;
+    var table = layui.table;
+
+    let cookie = layui.cookie;
+    let session = $.cookie('the_cookie');
+    if(session == null || session == ""){
+      layer.alert("您还未登录，请先登录",{icon:5},function () {
+        location.href="/qcby/views/user/login.html";
+      });
+    }
+
+
+    let url = decodeURI(window.location.href);
+    let argsIndex = url.split("=");
+    let arg = argsIndex[1];
+
+    // console.info(project + cla_name);
+    let  myurl = "/qcby/teacher/paperSore?testId=" + arg;
+    //初始化表格
+    var myTable = table.render({
+      elem: '#test'
+      ,title:"我的表格"
+      ,height: "full"
+      ,url: myurl //数据接口
+      ,toolbar:"#myToolBar"
+      ,defaultToolbar:[]
+      ,page:true
+      //,limit:5
+      //,limits:[30,60,90]
+      ,loading:true
+      ,totalRow: true
+      ,initSort: {
+        field: 'fraction' //排序字段，对应 cols 设定的各字段名
+        ,type: 'desc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
+      }
+      ,text:{
+        none: '暂无数据' //默认：无数据。注：该属性为 layui 2.2.5 开始新增
+      }
+      ,cols: [
+        [ //表头
+          {type: 'checkbox', fixed: 'left'}
+           ,{field: 'paiming', title: '排名', width:80,templet:'#zizeng',type: 'numbers',}
+          ,{field: 'user', title: '学号',edit:"text",align:"center" ,}
+          ,{field: 'name', title: '姓名',align:"center" ,}
+          ,{field: 'sex', title: '性别' ,templet: function (data) {
+              return data.type == 1 ? "男" :"女";
+            }}
+          ,{field: 'fraction', title: '得分',}
+          ,{field: 'phone', title: '电话',}
+          ,{field: 'claName', title: '班级',}
+
+          // ,{fixed: 'right', title:'操作', toolbar: '#myTool', width:150,align:"center"}
+        ]
+      ]
+    })
+
+  })
+</script>
+</body>
+</html>

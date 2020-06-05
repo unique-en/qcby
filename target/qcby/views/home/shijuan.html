@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>试卷</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/qcby/layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/qcby/layuiadmin/style/admin.css" media="all">
+    <link rel="stylesheet" href="/qcby/layuiadmin/style/template.css" media="all">
+    <link href="/qcby/favicon.ico" rel="shortcut icon" />
+</head>
+<body>
+    <div class="layui-fluid">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md12">
+                <div class="layui-card layadmin-serach-main">
+                    <form class="layui-form">
+                        <div class="layui-card-header" style="width: 300px;margin: 0 auto;">
+                            <p style="text-align: center;font-size: 18px;">
+                                <strong id="title" th:text="${testTitle}"></strong>
+                            </p>
+                            <p style="text-align: center;font-size: 15px;">
+                                <strong id="className" th:text="${cla_name}"></strong>
+                            </p>
+                            <p style="font-size: 15px;display: none;">
+                                <strong id="testid" th:text="${testId}"></strong>
+                            </p>
+                            <p class="layadmin-font-em" style="text-align: center;width: 320px;" th:text="'考试时间：' + ${date}"></p>
+                        </div>
+                        <div class="layui-card-body">
+                            <strong th:if="${not #lists.isEmpty(one)}">一、单项选择题</strong>
+                            <ol  style="margin-left: 40px;">
+                                <li th:each="one:${one}" class="layui-form" style="list-style: decimal;">
+                                    <label class="layui-form-label" th:text="'(' + ${one.fraction} +') ' + ${one.topic}"></label><br>
+                                    <div class="layui-form-item">
+                                    <div class="layui-input-block" lay-filter>
+                                        <input type="radio" th:name="'1'+${one.id}" value="A" th:title="'A:' + ${one.a}"><br>
+                                        <input type="radio" th:name="'1'+${one.id}" value="B" th:title="'B:' +  ${one.b}"><br>
+                                        <input type="radio" th:name="'1'+${one.id}" value="C" th:title="'C:' +  ${one.c}"><br>
+                                        <input type="radio" th:name="'1'+${one.id}" value="D" th:title="'D:' +  ${one.d}">
+                                    </div>
+                                  </div>
+                                </li>
+                                <hr />
+                            </ol><hr>
+                            <strong th:if="${not #lists.isEmpty(two)}">二、多项选择题</strong>
+                            <ol style="margin-left: 40px;">
+                                <li th:each="two:${two}" class="layui-form" style="list-style: decimal;">
+                                    <div class="layui-form-item" lay-filter="filter">
+                                        <p class="layui-form-label" th:text="'(' + ${two.fraction} +') ' +${two.topic}"></p><br><br>
+                                        <div class="layui-input-block">
+                                            <input type="checkbox" th:name="'A' + ${two.id}" th:title="'A：' + ${two.a}"><br>
+                                            <input type="checkbox" th:name="'B' + ${two.id}" th:title="'B：' + ${two.b}"><br>
+                                            <input type="checkbox" th:name="'C' + ${two.id}" th:title="'C：' + ${two.c}"><br>
+                                            <input type="checkbox" th:name="'D' + ${two.id}" th:title="'D：' + ${two.d}">
+                                        </div>
+                                    </div>
+                                </li><hr>
+                            </ol><hr>
+                            <strong th:if="${not #lists.isEmpty(three)}">三、简答题</strong>
+                            <ol class="layadmin-serach-list"style="margin-left: 40px;">
+                                <li th:each="three:${three}"  style="list-style: decimal;">
+                                    <label class="layui-form-label" th:text="'(' + ${three.fraction} +') ' +${three.topic}"></label><br><br>
+                                    <textarea id="demo" lay-verify="content"></textarea>
+                                </li><hr>
+                            </ol>
+                            <div class="layui-form-item" th:if="${flag} eq 0">
+                                <div class="layui-input-block">
+                                    <button id="buttonSubmit" class="layui-btn" lay-submit lay-filter="*">立即提交</button>
+                                    <button id="buttonUpdata" type="reset" class="layui-btn layui-btn-primary">重置</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <p style="text-align: center;font-size: 25px;">
+                        <strong id="score" style="color: red;"></strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/qcby/layuiadmin/layui/layui.js"></script>
+    <script>
+        layui.config({
+            base: '/qcby/layuiadmin/' //静态资源所在路径
+        }).extend({
+            index: 'lib/index' //主入口模块
+        }).use(['index', 'laypage','layedit','form','jquery','layer','cookie'], function(){
+            var laypage = layui.laypage;
+            var layedit = layui.layedit;
+            var form = layui.form;
+            var $ = layui.jquery;
+            var layer = layui.layer;
+
+
+            let cookie = layui.cookie;
+            let session = $.cookie('the_cookie');
+            if(session == null || session == ""){
+                layer.alert("您还未登录，请先登录",{icon:5},function () {
+                    location.href="/qcby/views/user/login.html";
+                });
+            }
+            var demo = layedit.build('demo');
+            //提交时把值同步到文本域中
+            form.verify({
+                //content富文本域中的lay-verify值
+                content: function (value) {
+                    return layedit.sync(demo);
+                }
+            });
+
+
+            laypage.render({
+                elem: 'LAY-template-search-page'
+                ,count: 70
+                ,jump: function(obj, first){
+                    if(!first){
+                        layer.msg('第'+ obj.curr +'页');
+                    }
+                }
+            });
+
+
+            form.on('submit(*)', function(data){
+                // var aaaa = layedit.getContent(demo);
+                // console.info(aaaa);
+
+                // console.log(data.elem); //被执行事件的元素DOM对象，一般为button对象
+                // console.log(data.form); //被执行提交的form对象，一般在存在form标签时才会返回
+                // console.log(data.field); //当前容器的全部表单字段，名值对形式：{name: value}
+                let dat = data.field;
+                console.log(dat);
+                let teid = $("#testid").text();
+                let Id = {"teid":teid};
+                let obj = Object.assign(dat,Id);
+
+                layer.open({
+                    type: 0,
+                    scrollbar:false,
+                    icon:0,
+                    content: '确认提交后不可修改',
+                    area: ['230px', '170px'],
+                    btn: ['确定','返回修改'],
+                    btn1: function(layero, index){
+
+                        $.ajax({
+                            type:'post',
+                            url: '/qcby/teacher/judge', //实际使用请改成服务端真实接口
+                            data: obj,
+                            cache: false,
+                            async : false,
+                            //dataType: "JSON",
+                            success: function(res){
+                                layer.msg('提交成功', {
+                                    offset: '15px'
+                                    ,icon: 1
+                                    ,time: 1000
+                                }, function(){
+                                    console.info(res);
+                                    $("#buttonSubmit").attr('disabled',true);
+                                    $("#buttonUpdata").attr('disabled',true);
+                                    $("#score").text("您的选择题分数为:" + res.score);
+                                });
+                            }
+                        });
+                    }
+                });
+
+                return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+            });
+
+
+
+        });
+    </script>
+</body>
+</html>

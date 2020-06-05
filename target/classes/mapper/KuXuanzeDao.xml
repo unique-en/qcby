@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qcby.dao.KuXuanzeDao">
+  <resultMap id="BaseResultMap" type="com.qcby.entity.KuXuanze">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="test_id" jdbcType="VARCHAR" property="testId" />
+    <result column="test_title" jdbcType="VARCHAR" property="testTitle" />
+    <result column="project" jdbcType="VARCHAR" property="project" />
+    <result column="types" jdbcType="INTEGER" property="types" />
+    <result column="topic" jdbcType="VARCHAR" property="topic" />
+    <result column="A" jdbcType="VARCHAR" property="a" />
+    <result column="B" jdbcType="VARCHAR" property="b" />
+    <result column="C" jdbcType="VARCHAR" property="c" />
+    <result column="D" jdbcType="VARCHAR" property="d" />
+    <result column="answer" jdbcType="VARCHAR" property="answer" />
+    <result column="parsing" jdbcType="VARCHAR" property="parsing" />
+    <result column="difficult" jdbcType="VARCHAR" property="difficult" />
+    <result column="fraction" jdbcType="DOUBLE" property="fraction" />
+    <result column="person" jdbcType="INTEGER" property="person" />
+    <result column="rig" jdbcType="INTEGER" property="rig" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, test_id, test_title, project, types, topic, A, B, C, D, answer, parsing, difficult, 
+    fraction, person, rig
+  </sql>
+  <select id="selectByExample" parameterType="com.qcby.entity.KuXuanzeExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from ku_xuanze
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ku_xuanze
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from ku_xuanze
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qcby.entity.KuXuanzeExample">
+    delete from ku_xuanze
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qcby.entity.KuXuanze">
+    insert into ku_xuanze (id, test_id, test_title, 
+      project, types, topic, 
+      A, B, C, D, 
+      answer, parsing, difficult, 
+      fraction, person, rig
+      )
+    values (#{id,jdbcType=INTEGER}, #{testId,jdbcType=VARCHAR}, #{testTitle,jdbcType=VARCHAR}, 
+      #{project,jdbcType=VARCHAR}, #{types,jdbcType=INTEGER}, #{topic,jdbcType=VARCHAR}, 
+      #{a,jdbcType=VARCHAR}, #{b,jdbcType=VARCHAR}, #{c,jdbcType=VARCHAR}, #{d,jdbcType=VARCHAR}, 
+      #{answer,jdbcType=VARCHAR}, #{parsing,jdbcType=VARCHAR}, #{difficult,jdbcType=VARCHAR}, 
+      #{fraction,jdbcType=DOUBLE}, #{person,jdbcType=INTEGER}, #{rig,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.qcby.entity.KuXuanze">
+    insert into ku_xuanze
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="testId != null">
+        test_id,
+      </if>
+      <if test="testTitle != null">
+        test_title,
+      </if>
+      <if test="project != null">
+        project,
+      </if>
+      <if test="types != null">
+        types,
+      </if>
+      <if test="topic != null">
+        topic,
+      </if>
+      <if test="a != null">
+        A,
+      </if>
+      <if test="b != null">
+        B,
+      </if>
+      <if test="c != null">
+        C,
+      </if>
+      <if test="d != null">
+        D,
+      </if>
+      <if test="answer != null">
+        answer,
+      </if>
+      <if test="parsing != null">
+        parsing,
+      </if>
+      <if test="difficult != null">
+        difficult,
+      </if>
+      <if test="fraction != null">
+        fraction,
+      </if>
+      <if test="person != null">
+        person,
+      </if>
+      <if test="rig != null">
+        rig,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="testId != null">
+        #{testId,jdbcType=VARCHAR},
+      </if>
+      <if test="testTitle != null">
+        #{testTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="project != null">
+        #{project,jdbcType=VARCHAR},
+      </if>
+      <if test="types != null">
+        #{types,jdbcType=INTEGER},
+      </if>
+      <if test="topic != null">
+        #{topic,jdbcType=VARCHAR},
+      </if>
+      <if test="a != null">
+        #{a,jdbcType=VARCHAR},
+      </if>
+      <if test="b != null">
+        #{b,jdbcType=VARCHAR},
+      </if>
+      <if test="c != null">
+        #{c,jdbcType=VARCHAR},
+      </if>
+      <if test="d != null">
+        #{d,jdbcType=VARCHAR},
+      </if>
+      <if test="answer != null">
+        #{answer,jdbcType=VARCHAR},
+      </if>
+      <if test="parsing != null">
+        #{parsing,jdbcType=VARCHAR},
+      </if>
+      <if test="difficult != null">
+        #{difficult,jdbcType=VARCHAR},
+      </if>
+      <if test="fraction != null">
+        #{fraction,jdbcType=DOUBLE},
+      </if>
+      <if test="person != null">
+        #{person,jdbcType=INTEGER},
+      </if>
+      <if test="rig != null">
+        #{rig,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qcby.entity.KuXuanzeExample" resultType="java.lang.Long">
+    select count(*) from ku_xuanze
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update ku_xuanze
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.testId != null">
+        test_id = #{record.testId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.testTitle != null">
+        test_title = #{record.testTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.project != null">
+        project = #{record.project,jdbcType=VARCHAR},
+      </if>
+      <if test="record.types != null">
+        types = #{record.types,jdbcType=INTEGER},
+      </if>
+      <if test="record.topic != null">
+        topic = #{record.topic,jdbcType=VARCHAR},
+      </if>
+      <if test="record.a != null">
+        A = #{record.a,jdbcType=VARCHAR},
+      </if>
+      <if test="record.b != null">
+        B = #{record.b,jdbcType=VARCHAR},
+      </if>
+      <if test="record.c != null">
+        C = #{record.c,jdbcType=VARCHAR},
+      </if>
+      <if test="record.d != null">
+        D = #{record.d,jdbcType=VARCHAR},
+      </if>
+      <if test="record.answer != null">
+        answer = #{record.answer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parsing != null">
+        parsing = #{record.parsing,jdbcType=VARCHAR},
+      </if>
+      <if test="record.difficult != null">
+        difficult = #{record.difficult,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fraction != null">
+        fraction = #{record.fraction,jdbcType=DOUBLE},
+      </if>
+      <if test="record.person != null">
+        person = #{record.person,jdbcType=INTEGER},
+      </if>
+      <if test="record.rig != null">
+        rig = #{record.rig,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update ku_xuanze
+    set id = #{record.id,jdbcType=INTEGER},
+      test_id = #{record.testId,jdbcType=VARCHAR},
+      test_title = #{record.testTitle,jdbcType=VARCHAR},
+      project = #{record.project,jdbcType=VARCHAR},
+      types = #{record.types,jdbcType=INTEGER},
+      topic = #{record.topic,jdbcType=VARCHAR},
+      A = #{record.a,jdbcType=VARCHAR},
+      B = #{record.b,jdbcType=VARCHAR},
+      C = #{record.c,jdbcType=VARCHAR},
+      D = #{record.d,jdbcType=VARCHAR},
+      answer = #{record.answer,jdbcType=VARCHAR},
+      parsing = #{record.parsing,jdbcType=VARCHAR},
+      difficult = #{record.difficult,jdbcType=VARCHAR},
+      fraction = #{record.fraction,jdbcType=DOUBLE},
+      person = #{record.person,jdbcType=INTEGER},
+      rig = #{record.rig,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qcby.entity.KuXuanze">
+    update ku_xuanze
+    <set>
+      <if test="testId != null">
+        test_id = #{testId,jdbcType=VARCHAR},
+      </if>
+      <if test="testTitle != null">
+        test_title = #{testTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="project != null">
+        project = #{project,jdbcType=VARCHAR},
+      </if>
+      <if test="types != null">
+        types = #{types,jdbcType=INTEGER},
+      </if>
+      <if test="topic != null">
+        topic = #{topic,jdbcType=VARCHAR},
+      </if>
+      <if test="a != null">
+        A = #{a,jdbcType=VARCHAR},
+      </if>
+      <if test="b != null">
+        B = #{b,jdbcType=VARCHAR},
+      </if>
+      <if test="c != null">
+        C = #{c,jdbcType=VARCHAR},
+      </if>
+      <if test="d != null">
+        D = #{d,jdbcType=VARCHAR},
+      </if>
+      <if test="answer != null">
+        answer = #{answer,jdbcType=VARCHAR},
+      </if>
+      <if test="parsing != null">
+        parsing = #{parsing,jdbcType=VARCHAR},
+      </if>
+      <if test="difficult != null">
+        difficult = #{difficult,jdbcType=VARCHAR},
+      </if>
+      <if test="fraction != null">
+        fraction = #{fraction,jdbcType=DOUBLE},
+      </if>
+      <if test="person != null">
+        person = #{person,jdbcType=INTEGER},
+      </if>
+      <if test="rig != null">
+        rig = #{rig,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qcby.entity.KuXuanze">
+    update ku_xuanze
+    set test_id = #{testId,jdbcType=VARCHAR},
+      test_title = #{testTitle,jdbcType=VARCHAR},
+      project = #{project,jdbcType=VARCHAR},
+      types = #{types,jdbcType=INTEGER},
+      topic = #{topic,jdbcType=VARCHAR},
+      A = #{a,jdbcType=VARCHAR},
+      B = #{b,jdbcType=VARCHAR},
+      C = #{c,jdbcType=VARCHAR},
+      D = #{d,jdbcType=VARCHAR},
+      answer = #{answer,jdbcType=VARCHAR},
+      parsing = #{parsing,jdbcType=VARCHAR},
+      difficult = #{difficult,jdbcType=VARCHAR},
+      fraction = #{fraction,jdbcType=DOUBLE},
+      person = #{person,jdbcType=INTEGER},
+      rig = #{rig,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByExampleWithRowbounds" parameterType="com.qcby.entity.KuXuanzeExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from ku_xuanze
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+</mapper>
