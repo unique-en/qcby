@@ -5,7 +5,7 @@
 <generatorConfiguration>
 
     <!-- 配置连接驱动包 -->
-    <classPathEntry location="E:\mavencangku\mysql\mysql-connector-java\5.1.37\mysql-connector-java-5.1.37.jar"/>
+    <classPathEntry location=""/>
 
     <!-- 设置生成代码的规则 targetRuntime开发环境使用Mybatis的版本 -->
     <context id="DB2Tables" targetRuntime="MyBatis3">
@@ -23,10 +23,10 @@
         <!-- password="shuaigeLIANGNV11!!">-->
 
         <jdbcConnection
-            connectionURL="jdbc:mysql://bj-cynosdbmysql-grp-0tg87biu.sql.tencentcdb.com:28838/mytest?characterEncoding=utf8"
+            connectionURL="jdbc:mysql:?characterEncoding=utf8"
             driverClass="com.mysql.jdbc.Driver"
-            userId="root"
-            password="shuaigeLIANGNV11!!">
+            userId=""
+            password="">
         </jdbcConnection>
 
         <!-- java类型处理器
