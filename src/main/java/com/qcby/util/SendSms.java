@@ -34,8 +34,8 @@ public class SendSms {
     static final String domain = "dysmsapi.aliyuncs.com";
 
     // TODO 此处需要替换成开发者自己的AK(在阿里云访问控制台寻找)
-    static final String accessKeyId = "LTAI4FcnvJoPhR5DH2GhHCtY";
-    static final String accessKeySecret = "MlVT63963YHtAtGP2Dk4hrjDT2uDa8";
+    static final String accessKeyId = "";
+    static final String accessKeySecret = "";
 
     static String cellphone = "";
     static String yzm = "";
