@@ -325,8 +325,7 @@ public class LoginController extends BaseController{
      * @return
      */
     @RequestMapping(value = "/repass",method = RequestMethod.POST)
-    @ResponseBody
-    public String repass(Model model, @RequestParam("password") String password , @RequestParam("occupation") String occupation , @RequestParam("repass") String repass , HttpServletRequest request) {
+    public String repass(Model model, @RequestParam("pwd") String pwd , @RequestParam("password") String password , @RequestParam("occupation") String occupation , @RequestParam("repass") String repass , HttpServletRequest request) {
 
         //验证是否登录
         String session = (String) request.getSession().getAttribute("loginUser");
@@ -334,24 +333,25 @@ public class LoginController extends BaseController{
             model.addAttribute("msg","请先登录");
             return "/user/login";
         }
-        if(!password.equals(repass)){
+        if(!pwd.equals(repass)){
             model.addAttribute("msg","两次输入密码不一致,请重新登录");
             return "/set/user/password";
         }
 
         //对新密码进行MD5加密
         String newpwd = Md5Util.encrypByMd5Jar(repass);
-
+        //旧密码判断
+        String oldpwd = Md5Util.encrypByMd5Jar(password);
         if("学生".equals(occupation)){
             Student student = studentService.selsctById(session);
-            if(!newpwd.equals(student.getPwd())){
+            if(!oldpwd.equals(student.getPwd())){
                 model.addAttribute("msg","原密码错误，请重新输入");
                 return "/set/user/password";
             }
             int isStu = studentService.repass(session,newpwd);
         }else {
             Teacher teacher = teacherService.selsctById(session);
-            if(!newpwd.equals(teacher.getTeacPwd())){
+            if(!oldpwd.equals(teacher.getTeacPwd())){
                 model.addAttribute("msg","原密码错误，请重新输入");
                 return "/set/user/password";
             }
