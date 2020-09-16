@@ -399,7 +399,7 @@ public class LoginController extends BaseController{
      */
     @RequestMapping("/updataInfo")
     @ResponseBody
-    public Map<String , Object> updataInfo(@RequestParam("role") String role,@RequestParam("nickname") String nickname , @RequestParam("sex") String sex , @RequestParam("cellphone") String cellphone , HttpServletRequest request){
+    public Map<String , Object> updataInfo(@RequestParam("role") String role,@RequestParam("nickname") String nickname , @RequestParam("sex") String sex , @RequestParam("cellphone") String cellphone , @RequestParam(value = "cla_name" , required = false) String claName ,HttpServletRequest request){
         Map<String , Object> map = new HashMap<>();
         //正则表达式，用于判断手机是否只含有数字
         Pattern pattern = Pattern.compile("[0-9]*");
@@ -415,7 +415,7 @@ public class LoginController extends BaseController{
         }
         String session = (String) request.getSession().getAttribute("loginUser");
         if("学生".equals(role)){
-            int num = studentService.updataInfo(session ,nickname , sex , cellphone);
+            int num = studentService.updataInfo(session ,nickname , sex , cellphone , claName);
             if(num == 1){
                 map.put("code" , 0);
                 map.put("msg" , "success");

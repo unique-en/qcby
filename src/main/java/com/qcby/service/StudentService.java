@@ -55,7 +55,7 @@ public interface StudentService {
      */
     int repass(String stuId,String pwd);
 
-    int updataInfo(String userId , String nickname , String sex ,String cellphone);
+    int updataInfo(String userId , String nickname , String sex ,String cellphone , String claName);
 
     List<StuErrti> selsctErrByStuId(String stuId,int page,int limit);
 

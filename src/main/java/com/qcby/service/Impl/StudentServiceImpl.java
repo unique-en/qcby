@@ -136,7 +136,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public int updataInfo(String userId , String nickname, String sex, String cellphone) {
+    public int updataInfo(String userId , String nickname, String sex, String cellphone , String claName) {
         StudentExample example = new StudentExample();
         StudentExample.Criteria criteria = example.createCriteria();
         criteria.andStuIdEqualTo(userId);
@@ -148,6 +148,7 @@ public class StudentServiceImpl implements StudentService {
             student.setSex(0);
         }
         student.setName(nickname);
+        student.setClaName(claName);
         return studentDao.updateByExampleSelective(student , example);
     }
 
