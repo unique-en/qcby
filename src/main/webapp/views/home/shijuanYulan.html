@@ -50,7 +50,7 @@
                         <ol style="margin-left: 40px;">
                             <li th:each="two:${two}" class="layui-form" style="list-style: decimal;">
                                 <div class="layui-form-item">
-                                    <label class="layui-form-label" th:text="'(' + ${two.fraction} +')' +${two.topic}"></label>
+                                    <label class="layui-form-label" th:text="'(' + ${two.fraction eq null ? 0 : two.fraction} +')' +${two.topic}"></label>
                                     <label class="layui-form-label"  style="display: none"  th:text="${two.id}"></label><br>
                                     <div class="layui-input-block" lay-filter="*">
                                         <input type="checkbox" name="like[write]" th:title="'A:' + ${two.a}"><br>
@@ -64,9 +64,9 @@
                         <strong th:if="${not #lists.isEmpty(three)}">三、简答题</strong>
                         <ol class="layadmin-serach-list" style="margin-left: 40px;">
                             <li th:each="three:${three}" style="list-style: decimal;">
-                                <label class="layui-form-label" th:text="'(' + ${three.fraction} +')' +${three.topic}"></label>
+                                <label class="layui-form-label" th:text="'(' + ${three.fraction eq null ? 0 : three.fraction} +')' +${three.topic}"></label>
                                 <label class="layui-form-label" style="display: none"  th:text="${three.id}"></label><br><br>
-                                <textarea id="demo" style="display: none;"></textarea>
+                                <textarea  th:id="${three.id}" style="display: none" ></textarea>
                             </li><hr>
                         </ol>
 
@@ -84,7 +84,7 @@
                             </div>
                             <button style="margin-top: 25px;margin-left: 208px;" class="layui-btn layuiadmin-btn-admin" type="submit">发布</button>
                         </form>
-                        <button style="margin-left: 85px;position: relative;top: -38px" class="layui-btn layuiadmin-btn-admin" data-type="batchdel"><a lay-href="/qcby/views/home/timu.html">返回</a></button>
+<!--                        <button style="margin-left: 85px;position: relative;top: -38px" class="layui-btn layuiadmin-btn-admin" data-type="batchdel"><a lay-href="/qcby/views/home/timu.html">返回</a></button>-->
                     </div>
                 </div>
             </div>
@@ -112,7 +112,11 @@
             }
 
 
-            layedit.build('demo');
+            var objul=document.getElementById("jianda");
+            var lis=objul.getElementsByTagName("textarea");
+            for(var i = 0 ; i < lis.length ; i++){
+                layedit.build(lis[i].id);
+            }
 
             laypage.render({
                 elem: 'LAY-template-search-page'

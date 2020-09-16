@@ -60,10 +60,10 @@
                                 </li><hr>
                             </ol><hr>
                             <strong th:if="${not #lists.isEmpty(three)}">三、简答题</strong>
-                            <ol class="layadmin-serach-list"style="margin-left: 40px;">
+                            <ol class="layadmin-serach-list" id="jianda" style="margin-left: 40px;">
                                 <li th:each="three:${three}"  style="list-style: decimal;">
                                     <label class="layui-form-label" th:text="'(' + ${three.fraction} +') ' +${three.topic}"></label><br><br>
-                                    <textarea id="demo" lay-verify="content"></textarea>
+                                    <textarea th:id="${three.id}" style="display: none" lay-verify="content"></textarea>
                                 </li><hr>
                             </ol>
                             <div class="layui-form-item" th:if="${flag} eq 0">
@@ -102,14 +102,18 @@
                     location.href="/qcby/views/user/login.html";
                 });
             }
-            var demo = layedit.build('demo');
+            var objul=document.getElementById("jianda");
+            var lis=objul.getElementsByTagName("textarea");
+            for(var i = 0 ; i < lis.length ; i++){
+               layedit.build(lis[i].id);
+            }
             //提交时把值同步到文本域中
-            form.verify({
-                //content富文本域中的lay-verify值
-                content: function (value) {
-                    return layedit.sync(demo);
-                }
-            });
+            // form.verify({
+            //     //content富文本域中的lay-verify值
+            //     content: function (value) {
+            //         return layedit.sync(demo);
+            //     }
+            // });
 
 
             laypage.render({

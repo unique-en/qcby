@@ -74,15 +74,18 @@ public class TeacherController extends BaseController{
      */
     @RequestMapping(value = "/insert" , method = RequestMethod.POST)
     @ResponseBody
-    public String insert(Model model , @RequestParam("testId") String testId,@RequestParam("testTitle") String testTitle, @RequestParam("difficult")String difficult ,@RequestParam("second") String second ,
+    public String insert(Model model , @RequestParam("testId") String testId,@RequestParam("testTitle") String testTitle, @RequestParam("difficult")String difficult ,@RequestParam(value = "second",required = false)  String second ,
                          @RequestParam("title")String title , @RequestParam("A")String A , @RequestParam("B")String B , @RequestParam("C")String C , @RequestParam("D")String D,
-                         @RequestParam("answer")String answer , @RequestParam("parsing")String parsing , @RequestParam("project")String project , @RequestParam("type")String type ,HttpServletRequest request){
+                         @RequestParam("answer")String answer , @RequestParam(value = "parsing",required = false)String parsing , @RequestParam("project")String project , @RequestParam("type")String type ,HttpServletRequest request){
         //后端验证是否登录
         String session = (String) request.getSession().getAttribute("loginUser");
         if(session == null){
             model.addAttribute("msg","请先登录");
             return "/user/login";
         }
+
+        System.err.println(answer+"--------------------------");
+        System.err.println(answer.length()+"--------------------------");
 
         if(answer == null || answer == ""){
             return "error";
@@ -105,9 +108,12 @@ public class TeacherController extends BaseController{
             jianda.setTestId(testId);
             jianda.setProject(project);
             jianda.setTopic(title);
+
             jianda.setAnswer(answer);
             jianda.setDifficult(difficult);
-            jianda.setFraction(Double.parseDouble(second));
+            if(second != null && second != ""){
+                jianda.setFraction(Double.parseDouble(second));
+            }
             jianda.setPerson(0);
             jianda.setRig(0);
             jianda.setTestTitle(testTitle);

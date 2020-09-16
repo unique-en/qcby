@@ -192,11 +192,15 @@
 
 
       $("#add").on("click",function(){
-         var testTitle = $("#testTitle").val();
-         var testId = $("#testId").text();
-         var difficult = $("#difficult").val();
-         var type = $("#type").val();
-         var second = $("#second").val();
+        var second = $("#second").val();
+        if(second == "" || second == null){
+          layer.msg('请填写题目分数');
+          return false;
+        }
+        var testTitle = $("#testTitle").val();
+        var testId = $("#testId").text();
+        var difficult = $("#difficult").val();
+        var type = $("#type").val();
          var title = layedit.getText(demo1);
          var A = layedit.getText(demoA);
          var B = layedit.getText(demoB);
@@ -238,7 +242,7 @@
                  , icon: 1
                  , time: 1000
                }, function () {
-                 $("#second").val("");
+                 // $("#second").val("");
                  layedit.setContent(demo1, "");
                  layedit.setContent(demoA, "");
                  layedit.setContent(demoB, "");
