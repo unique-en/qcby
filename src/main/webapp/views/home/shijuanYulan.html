@@ -62,7 +62,7 @@
                             </li><hr>
                         </ol>
                         <strong th:if="${not #lists.isEmpty(three)}">三、简答题</strong>
-                        <ol class="layadmin-serach-list" style="margin-left: 40px;">
+                        <ol class="layadmin-serach-list" style="margin-left: 40px;" id="jianda">
                             <li th:each="three:${three}" style="list-style: decimal;">
                                 <label class="layui-form-label" th:text="'(' + ${three.fraction eq null ? 0 : three.fraction} +')' +${three.topic}"></label>
                                 <label class="layui-form-label" style="display: none"  th:text="${three.id}"></label><br><br>
